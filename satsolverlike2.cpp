@@ -4,36 +4,27 @@
 
 using namespace std;
 
-/*bool is_satisfied(vector<int> var, int cls_n, vector<vector<int>> cls)
-{
-    for (int i = 0; i < cls_n; ++i) {
-        int j;
-        for (j = 0; j < cls[i].size(); ++j) {
-            int v = cls[i][j];
-            if (v > 0 && var[v - 1] == 1) {
-                //cout<<"found "<<v<<" ("<<i<<","<<j<<")\n";
-                break;
-            }
-            if (v < 0 && var[-v - 1] == 0) {
-                //cout<<"found "<<v<<" ("<<i<<","<<j<<")\n";
-                break;
-            }
-        }
-        
-        if (j == cls[i].size()) {
-            return false;
-        }
-    }
-    
-    return true;
-}*/
-void debug(int var_n, vector<int> var);
+//void debug(int var_n, vector<int> var);
+
 bool is_satisfied(int var_n, vector<int> &var, int cls_n, vector<vector<int>> cls, int k)
 {
     if (k == cls_n) {
-        for (int i = 0; i < var_n; ++i) {
-            if (var[i] == 0) {
-                var[i] = 1;
+        for (int i = 0; i < cls_n; ++i) {
+            int j;
+            for (j = 0; j < cls[i].size(); ++j) {
+                int v = cls[i][j];
+                
+                if ((var[abs(v) - 1] > 0 && v > 0) || (var[abs(v) - 1] < 0 && v < 0)) {
+                    break;
+                }
+                
+                if (var[abs(v) - 1] == 0) {
+                    var[abs(v) - 1] = (v > 0) ? 1 : -1;
+                }
+            }
+            
+            if (j == cls[i].size()) {
+                return false;
             }
         }
         return true;
@@ -42,15 +33,11 @@ bool is_satisfied(int var_n, vector<int> &var, int cls_n, vector<vector<int>> cl
     for (int i = 0; i < cls[k].size(); ++i) {
         int v = cls[k][i];
         int temp = var[abs(v) - 1];
-        cout << "k = " << k << ", v = " << v <<", temp = " << temp << endl;
         if (temp != 0 && ((temp > 0 && v < 0) || (temp < 0 && v > 0))) {
             continue;
         }
         
         var[abs(v) - 1] = (v > 0) ? 1 : -1;
-        cout << "set:" << abs(v) <<", " << var[abs(v) - 1] << endl;
-        cout << "var:";
-        debug(var_n, var);
         
         if(is_satisfied(var_n, var, cls_n, cls, k + 1)) {
             return true;
@@ -128,17 +115,6 @@ int main()
         }
     }
     
-    /*
-    for (int k = 0; k < (1 << variables_number); ++k) {
-        for (int i = 0; i < variables_number; ++i) {
-            var[i] = !!(k & (1 << i));
-        }
-        //debug(variables_number,var);
-        if (is_satisfied(var, clauses_number, cls)) {
-            print_variablse(variables_number, var);
-            return 0;
-        }
-    }*/
     if (is_satisfied(variables_number, var, clauses_number, cls, 0)) {
         print_variablse(variables_number, var);
     } else {
