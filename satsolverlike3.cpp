@@ -10,6 +10,7 @@ void variable_allocate(int v, vector<int> &var, vector<set<int>> &cls)
     var[abs(v) - 1] = (v > 0) ? 1 : -1;
     
     vector<set<int>>::iterator itr = cls.begin();
+    int count = 0;
     while (itr != cls.end()) {
         if (cls.empty()) {
             return ;
@@ -17,6 +18,7 @@ void variable_allocate(int v, vector<int> &var, vector<set<int>> &cls)
         
         if ((*itr).find(v) != (*itr).end()) {
             itr = cls.erase(itr);
+            count++;
         } else {
             (*itr).erase(-v);
             itr++;
@@ -45,6 +47,8 @@ bool is_satisfied(vector<int> &var, vector<set<int>> cls)
                 
                 int v = *((*itr).begin());
                 variable_allocate(v, var, cls);
+                
+                break;
             }
         }
     } while (has_one_literal);
@@ -62,6 +66,7 @@ bool is_satisfied(vector<int> &var, vector<set<int>> cls)
     
     vector<set<int>> cls_copy(cls.size());
     copy(cls.begin(), cls.end(), cls_copy.begin());
+    
     int v = *(cls[0].begin());
     
     variable_allocate(v, var, cls_copy);

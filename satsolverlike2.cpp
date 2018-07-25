@@ -4,8 +4,6 @@
 
 using namespace std;
 
-//void debug(int var_n, vector<int> var);
-
 bool is_satisfied(int var_n, vector<int> &var, int cls_n, vector<vector<int>> cls, int k)
 {
     if (k == cls_n) {
@@ -59,18 +57,6 @@ void print_variablse(int var_n, vector<int> var)
             cout <<" ";
         }
         cout << (var[i] == 1 ? (i + 1) : -(i + 1));
-    }
-    
-    cout << endl;
-}
-
-void debug(int var_n, vector<int> var)
-{
-    for (int i = 0; i < var_n; ++i) {
-        if (i > 0) {
-            cout <<" ";
-        }
-        cout << var[i];
     }
     
     cout << endl;

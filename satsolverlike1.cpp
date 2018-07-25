@@ -40,19 +40,6 @@ void print_variablse(int var_n, vector<int> var)
     cout << endl;
 }
 
-// toriaezu tsuika
-void debug(int var_n, vector<int> var)
-{
-    for (int i = 0; i < var_n; ++i) {
-        if (i > 0) {
-            cout <<" ";
-        }
-        cout << var[i];
-    }
-    
-    cout << endl;
-}
-
 int main()
 {
     string input_string;
