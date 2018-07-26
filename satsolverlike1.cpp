@@ -26,7 +26,7 @@ bool is_satisfied(vector<int> var, int cls_n, vector<vector<int>> cls)
     return true;
 }
 
-void print_variablse(int var_n, vector<int> var)
+void print_variables(int var_n, vector<int> var)
 {
     cout << "SATISFIABLE" << endl;
     
@@ -85,7 +85,7 @@ int main()
         }
         
         if (is_satisfied(var, clauses_number, cls)) {
-            print_variablse(variables_number, var);
+            print_variables(variables_number, var);
             return 0;
         }
     }
