@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <stack>
 
 using namespace std;
 
@@ -10,10 +11,10 @@ bool is_satisfied(vector<int> var, int cls_n, vector<vector<int>> cls)
         int j;
         for (j = 0; j < cls[i].size(); ++j) {
             int v = cls[i][j];
-            if (v > 0 && var[v - 1] == 1) {
+            if (v > 0 && var[v - 1] > 0) {
                 break;
             }
-            if (v < 0 && var[-v - 1] == 0) {
+            if (v < 0 && var[-v - 1] < 0) {
                 break;
             }
         }
@@ -26,6 +27,33 @@ bool is_satisfied(vector<int> var, int cls_n, vector<vector<int>> cls)
     return true;
 }
 
+bool backtrack(int var_n, vector<int> &var, int cls_n, vector<vector<int>> cls)
+{
+    stack<int> stack;
+    stack.push(0);
+    
+    while (!stack.empty()) {
+        int v = stack.top();
+        stack.pop();
+        
+        if (v != 0) {
+            var[abs(v) - 1] = v;
+        }
+        
+        if (abs(v) == var_n && is_satisfied(var, cls_n, cls)) {
+            return true;
+        } else if (abs(v) == var_n) {
+            continue;
+        }
+        
+        int next = abs(v) + 1;
+        stack.push(-next);
+        stack.push(next);
+    }
+    
+    return false;
+}
+
 void print_variables(int var_n, vector<int> var)
 {
     cout << "SATISFIABLE" << endl;
@@ -34,7 +62,7 @@ void print_variables(int var_n, vector<int> var)
         if (i > 0) {
             cout <<" ";
         }
-        cout << (var[i] == 1 ? (i + 1) : -(i + 1));
+        cout << var[i];
     }
     
     cout << endl;
@@ -79,15 +107,9 @@ int main()
         }
     }
     
-    for (int k = 0; k < (1 << variables_number); ++k) {
-        for (int i = 0; i < variables_number; ++i) {
-            var[i] = !!(k & (1 << i));
-        }
-        
-        if (is_satisfied(var, clauses_number, cls)) {
-            print_variables(variables_number, var);
-            return 0;
-        }
+    if (backtrack(variables_number, var, clauses_number, cls)) {
+        print_variables(variables_number, var);
+        return 0;
     }
     
     cout << "UNSATISFIABLE" << endl;
